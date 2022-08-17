@@ -12,7 +12,6 @@
     }
   ],
   "require": {
-    "mpdf/mpdf": "^8.1",
     "league/plates": "3.*",
     "erusev/parsedown": "^1.7",
     "symfony/console": "^4.3",

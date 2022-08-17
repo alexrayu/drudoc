@@ -18,10 +18,10 @@ class CreateDocsCommand extends Command {
     public function configure(): void
     {
         $this->setName('create')
-            ->setDescription('Create PDF format documentation.')
-            ->setHelp('This command allows you to generate documentation for your PHP files.')
-            ->addArgument('inputPath', InputArgument::REQUIRED, 'File or directory path where the PHP code is.')
-            ->addArgument('outputPath', InputArgument::REQUIRED, 'Directory where the documentation will be created.');
+            ->setDescription('Create markdown and HTML format documentation.')
+            ->setHelp('Generates documentation for a Drupal module.')
+            ->addArgument('inputPath', InputArgument::REQUIRED, 'Source file or directory.')
+            ->addArgument('outputPath', InputArgument::REQUIRED, 'Destination directory.');
     }
 
     /**
