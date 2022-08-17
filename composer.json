@@ -3,6 +3,8 @@
   "description": "Decumenter for Drupal modules",
   "type": "project",
   "license": "MIT",
+  "minimum-stability": "dev",
+  "prefer-stable":  true,
   "authors": [
     {
       "name": "Alexei Raiu",
@@ -10,9 +12,10 @@
     }
   ],
   "require": {
-    "php": ">=7.4",
-    "ext-mbstring": "*",
-    "erusev/parsedown": "^1.4",
-    "phpdocumentor/reflection-docblock": "^5.3"
+    "mpdf/mpdf": "^8.1",
+    "league/plates": "3.*",
+    "erusev/parsedown": "^1.7",
+    "symfony/console": "^4.3",
+    "phpdocumentor/reflection": "^5.2"
   }
 }
