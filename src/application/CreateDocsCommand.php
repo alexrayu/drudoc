@@ -15,8 +15,7 @@ class CreateDocsCommand extends Command {
     /**
      * Configure method.
      */
-    public function configure(): void
-    {
+    public function configure(): void {
         $this->setName('create')
             ->setDescription('Create markdown and HTML format documentation.')
             ->setHelp('Generates documentation for a Drupal module.')
@@ -28,8 +27,7 @@ class CreateDocsCommand extends Command {
      * @param InputInterface $input
      * @param OutputInterface $output
      */
-    public function execute(InputInterface $input, OutputInterface $output): void
-    {
+    public function execute(InputInterface $input, OutputInterface $output): void {
         $this->createDocs($input, $output);
     }
 }

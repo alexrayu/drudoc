@@ -6,7 +6,6 @@
  */
 
 require_once './vendor/autoload.php';
-require_once './settings.php';
 require 'src/application/CreateDocsCommand.php';
 
 use Symfony\Component\Console\Application;

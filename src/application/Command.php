@@ -26,6 +26,7 @@ class Command extends SymfonyCommand {
     protected function createDocs(InputInterface $input, OutputInterface $output): void {
         $inputPath = $input->getArgument('inputPath');
         $outputPath = $input->getArgument('outputPath');
+        $a = 1;
         try {
             $filesTreatment = new FilesTreatment($inputPath);
             $filesTreatment->createDocs($output, $outputPath);
