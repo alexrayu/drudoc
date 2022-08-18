@@ -8,6 +8,7 @@ use application\MdFile;
 use phpDocumentor\Reflection\File\LocalFile;
 use Symfony\Component\Console\Output\OutputInterface;
 use phpDocumentor\Reflection\Php\ProjectFactory;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class FilesTreatment
@@ -94,6 +95,57 @@ class FilesTreatment {
         $mdFile->createFromTrait($trait);
       }
     }
+  }
+
+  /**
+   * Getter for files.
+   *
+   * @return array
+   */
+  public function getFiles() {
+    return $this->files;
+  }
+
+  /**
+   * Search for files by extension.
+   *
+   * @param array $extensions
+   *   Extensions to scan for.
+   *
+   * @return array
+   *   Found files.
+   */
+  public function findFiles($path, array $extensions = []) {
+    $directory = new \RecursiveDirectoryIterator($path);
+    $iterator = new \RecursiveIteratorIterator($directory);
+    $files = [];
+
+    foreach ($extensions as $extension) {
+      $regex = new \RegexIterator($iterator, '/^.+\.' . $extension . '$/i', \RecursiveRegexIterator::GET_MATCH);
+      foreach ($regex as $item) {
+        $files[] = reset($item);
+      }
+    }
+
+    return $files;
+  }
+
+  /**
+   * Get data from yaml file by pappern.
+   *
+   * @param string $pattern
+   *   Pattern to scan for.
+   *
+   * @return array
+   *   Found data.
+   */
+  public function getYaml($path, $pattern) {
+    $files = $this->findFiles($path, [$pattern]);
+    if (!empty($files)) {
+      return Yaml::parse(file_get_contents(reset($files)));
+    }
+
+    return [];
   }
 
 }

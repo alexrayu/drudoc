@@ -14,7 +14,9 @@
   "require": {
     "league/plates": "3.*",
     "erusev/parsedown": "^1.7",
-    "symfony/console": "^4.3",
+    "symfony/console": "^5",
+    "symfony/yaml": "^5",
     "phpdocumentor/reflection": "^5.2"
+
   }
 }
