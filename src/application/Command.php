@@ -8,6 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 require 'FilesTreatment.php';
 require 'Doc.php';
+require 'Renderer.php';
 
 /**
  * Class Command
@@ -39,8 +40,13 @@ class Command extends SymfonyCommand {
     try {
       $filesTreatment = new FilesTreatment($inputPath);
 
+
       $doc = new Doc($inputPath, $filesTreatment);
-      $init = $doc->getBasicInfo();
+      $data = $doc->getDoc();
+
+
+      $renderer = new Renderer($outputPath, $data);
+      $renderer->write();
 
 
 

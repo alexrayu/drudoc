@@ -41,6 +41,7 @@ class Doc {
   public function __construct($inputPath, $filesTreatment) {
     $this->inputPath = $inputPath;
     $this->filesTreatment = $filesTreatment;
+    $this->getBasicInfo();
   }
 
   /**
@@ -59,7 +60,7 @@ class Doc {
    * @return bool
    *   Whether the basic info was loaded succesfully.
    */
-  public function getBasicInfo() {
+  protected function getBasicInfo() {
     try {
       $this->doc['basic'] = $this->filesTreatment->getYaml($this->inputPath, '*.info.yml');
       if (!empty($this->doc['basic'])) {
