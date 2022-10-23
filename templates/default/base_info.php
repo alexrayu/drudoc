@@ -23,9 +23,9 @@
 <?php if (!empty($item['arguments'])) {
 $args = [];
 foreach ($item['arguments'] as $arg) {
-  $args[] = '`' . $arg . "`\n";
+  $args[] = '`' . $arg . '`';
 } ?>
-- **Arguments:** <?php echo implode('  - ', $args); ?>.
+- **Arguments:** <?php echo implode(', ', $args); ?>.
 <?php } ?>
 <?php if (!empty($item['tags'])) {
   $tags = [];
@@ -72,7 +72,6 @@ if (empty($types)) $types[] = '*Library is empty*';
 1. `<?php echo $id; ?>`: <?php echo implode(', ', $types); ?>.
 <?php } ?>
 <?php } ?>
-
 
 
 <?php

@@ -6,6 +6,7 @@ use phpDocumentor\Reflection\File\LocalFile;
 use Symfony\Component\Console\Output\OutputInterface;
 use phpDocumentor\Reflection\Php\ProjectFactory;
 use League\Plates\Engine;
+use Parsedown;
 
 /**
  * Class Renderer. Main documentation renderer.
@@ -35,6 +36,13 @@ class Renderer {
    */
   private $templatesEngine;
 
+/**
+ * Parsedown class.
+ *
+ * @var Parsedown
+ */
+  private $parseDown;
+
   /**
    * Documentation class constructor.
    *
@@ -48,6 +56,7 @@ class Renderer {
     $this->templatesEngine = new Engine($this->templatesPath);
     $this->outputPath = $outputPath;
     $this->data = $data;
+    $this->parseDown = new Parsedown();
   }
 
   /**
@@ -56,6 +65,8 @@ class Renderer {
   public function write() {
     $contents = $this->templatesEngine->render('base_info', ['data' => $this->data]);
     file_put_contents($this->outputPath . 'output.md', $contents);
+    $html = $this->parseDown->text($contents);
+    file_put_contents($this->outputPath . 'output.html', $html);
   }
 
 }
