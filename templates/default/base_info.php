@@ -19,20 +19,20 @@
 <?php foreach ($data['yml']['services']['services'] as $id => $item) { ?>
 <?php $i++; ?>
 <?php echo $i; ?>. `<?php echo $id; ?>`.
-- Class: `<?php echo urldecode($item['class']); ?>`.
+- **Class:** `<?php echo urldecode($item['class']); ?>`.
 <?php if (!empty($item['arguments'])) {
 $args = [];
 foreach ($item['arguments'] as $arg) {
   $args[] = '`' . $arg . "`\n";
 } ?>
-- Arguments: <?php echo implode('  - ', $args); ?>.
+- **Arguments:** <?php echo implode('  - ', $args); ?>.
 <?php } ?>
 <?php if (!empty($item['tags'])) {
   $tags = [];
   foreach ($item['tags'] as $tag) {
     $tags[] = '`' . $tag['name'] . '`';
 } ?>
-- Tags: <?php echo implode(', ', $tags); ?>.
+- **Tags:** <?php echo implode(', ', $tags); ?>.
 <?php } ?>
 <?php } ?>
 <?php } ?>
@@ -48,8 +48,8 @@ foreach ($item['arguments'] as $arg) {
   else $handler = '*???*';
 ?>
 <?php echo $i; ?>. `<?php echo $id; ?>`.
-- Path: `<?php echo urldecode($item['path']); ?>`.
-- Handler: `<?php echo urldecode($handler); ?>`.
+  - **Path:** `<?php echo urldecode($item['path']); ?>`.
+  - **Handler:** `<?php echo urldecode($handler); ?>`.
 <?php } ?>
 <?php } ?>
 
