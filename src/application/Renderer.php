@@ -54,7 +54,7 @@ class Renderer {
    * Write the output file.
    */
   public function write() {
-    $contents = $this->templatesEngine->render('base_info.php', ['data' => $this->data]);
+    $contents = $this->templatesEngine->render('base_info', ['data' => $this->data]);
     file_put_contents($this->outputPath . 'output.md', $contents);
   }
 
