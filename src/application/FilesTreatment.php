@@ -107,7 +107,7 @@ class FilesTreatment {
   }
 
   /**
-   * Search for files by extension.
+   * Search for files by extension recursively.
    *
    * @param array $extensions
    *   Extensions to scan for.
@@ -115,11 +115,12 @@ class FilesTreatment {
    * @return array
    *   Found files.
    */
-  public function findFiles($path, array $extensions = []) {
+  public function findFilesRecursive($path, array $extensions = []) {
     $directory = new \RecursiveDirectoryIterator($path);
     $iterator = new \RecursiveIteratorIterator($directory);
     $files = [];
 
+    $directory->setFlags();
     foreach ($extensions as $extension) {
       $regex = new \RegexIterator($iterator, '/^.+\.' . $extension . '$/i', \RecursiveRegexIterator::GET_MATCH);
       foreach ($regex as $item) {
@@ -131,18 +132,36 @@ class FilesTreatment {
   }
 
   /**
+   * Search for files by extension.
+   *
+   * @param array $extensions
+   *   Extensions to scan for.
+   *
+   * @return array
+   *   Found files.
+   */
+  public function findFiles($path, array $extensions = []) {
+    $files = [];
+
+    foreach ($extensions as $extension) {
+      $files += glob($path . $extension);
+    }
+
+    return $files;
+  }
+
+  /**
    * Get data from yaml file by pappern.
    *
-   * @param string $pattern
-   *   Pattern to scan for.
+   * @param string $path
+   *   Full path to file.
    *
    * @return array
    *   Found data.
    */
-  public function getYaml($path, $pattern) {
-    $files = $this->findFiles($path, [$pattern]);
-    if (!empty($files)) {
-      return Yaml::parse(file_get_contents(reset($files)));
+  public function getYaml($path) {
+    if (file_exists($path)) {
+      return Yaml::parse(file_get_contents($path));
     }
 
     return [];

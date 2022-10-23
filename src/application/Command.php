@@ -49,10 +49,9 @@ class Command extends SymfonyCommand {
       $renderer->write();
 
 
-
-      $filesTreatment->createDocs($output, $outputPath);
+      #$filesTreatment->createDocs($output, $outputPath);
     } catch (\Exception $e) {
-      $output->writeln('Documentation could not be created.');
+      $output->writeln('Documentation could not be created: ' . $e->getMessage());
     }
   }
 

@@ -33,6 +33,13 @@ class Doc {
   private $filesTreatment;
 
   /**
+   * Yamls to load to get data from.
+   *
+   * @var string[]
+   */
+  private $yamls = ['info', 'libraries', 'links.menu', 'routing', 'services'];
+
+  /**
    * Documentation class constructor.
    *
    * @param string
@@ -41,7 +48,10 @@ class Doc {
   public function __construct($inputPath, $filesTreatment) {
     $this->inputPath = $inputPath;
     $this->filesTreatment = $filesTreatment;
-    $this->getBasicInfo();
+    $this->doc = [
+      '_pathinfo' => pathinfo($inputPath),
+    ];
+    $this->getYamlsInfo();
   }
 
   /**
@@ -55,21 +65,31 @@ class Doc {
   }
 
   /**
-   * Gets the basic information from the module path.
+   * Gets the main yamls information from the module path.
    *
    * @return bool
    *   Whether the basic info was loaded succesfully.
    */
-  protected function getBasicInfo() {
+  protected function getYamlsInfo() {
     try {
-      $this->doc['basic'] = $this->filesTreatment->getYaml($this->inputPath, '*.info.yml');
-      if (!empty($this->doc['basic'])) {
-        return TRUE;
+      $basename = $this->doc['_pathinfo']['filename'] ?? '';
+      if (!$basename) {
+        return FALSE;
       }
+      $basic = [];
+      foreach ($this->yamls as $name) {
+        $data = $this->filesTreatment->getYaml($this->inputPath . "$basename.$name.yml");
+        if (!empty($data)) {
+          $basic[$name] = $data;
+        }
+      }
+      $this->doc['yml'] = $basic;
     }
-    catch (\Exception $e) {}
+    catch (\Exception $e) {
+      return FALSE;
+    }
 
-    return FALSE;
+    return TRUE;
   }
 
 }
