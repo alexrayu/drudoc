@@ -1,7 +1,6 @@
 # <?php _d($data['yml']['info']['name']); ?>
 <?php _d($data['yml']['info']['description']); ?>
 
-
 ## Basic Information:
 - **Name:** <?php _d($data['yml']['info']['name']); ?>
 - **Machine name:** `<?php echo $data['_pathinfo']['filename']; ?>`.
@@ -20,13 +19,13 @@
 <?php foreach ($data['yml']['services']['services'] as $id => $item) { ?>
 <?php $i++; ?>
 <?php echo $i; ?>. `<?php echo $id; ?>`.
-- **Class:** `<?php echo urldecode($item['class']); ?>`.
+  - **Class:** `<?php echo urldecode($item['class']); ?>`.
 <?php if (!empty($item['arguments'])) {
 $args = [];
 foreach ($item['arguments'] as $arg) {
   $args[] = '`' . $arg . '`';
 } ?>
-- **Arguments:** <?php echo implode(', ', $args); ?>.
+  - **Arguments:** <?php echo implode(', ', $args); ?>.
 <?php } ?>
 <?php if (!empty($item['tags'])) {
   $tags = [];
@@ -73,7 +72,6 @@ if (empty($types)) $types[] = '*Library is empty*';
 1. `<?php echo $id; ?>`: <?php echo implode(', ', $types); ?>.
 <?php } ?>
 <?php } ?>
-
 
 <?php
 /**
