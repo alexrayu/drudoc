@@ -32,7 +32,7 @@ foreach ($item['arguments'] as $arg) {
   foreach ($item['tags'] as $tag) {
     $tags[] = '`' . $tag['name'] . '`';
 } ?>
-- **Tags:** <?php echo implode(', ', $tags); ?>.
+  - **Tags:** <?php echo implode(', ', $tags); ?>.
 <?php } ?>
 <?php } ?>
 <?php } ?>
