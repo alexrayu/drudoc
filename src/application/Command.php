@@ -39,17 +39,11 @@ class Command extends SymfonyCommand {
     }
     try {
       $filesTreatment = new FilesTreatment($inputPath);
-
-
       $doc = new Doc($inputPath, $filesTreatment);
       $data = $doc->getDoc();
-
-
       $renderer = new Renderer($outputPath, $data);
       $renderer->write();
 
-
-      #$filesTreatment->createDocs($output, $outputPath);
     } catch (\Exception $e) {
       $output->writeln('Documentation could not be created: ' . $e->getMessage());
     }

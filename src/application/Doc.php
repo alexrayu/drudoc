@@ -2,9 +2,7 @@
 
 namespace application;
 
-use phpDocumentor\Reflection\File\LocalFile;
-use Symfony\Component\Console\Output\OutputInterface;
-use phpDocumentor\Reflection\Php\ProjectFactory;
+
 
 /**
  * Class Doc. Main documentation handler.
@@ -33,6 +31,13 @@ class Doc {
   private $filesTreatment;
 
   /**
+   * Detected name of the source module.
+   *
+   * @var string
+   */
+  private $modulename;
+
+  /**
    * Yamls to load to get data from.
    *
    * @var string[]
@@ -51,7 +56,12 @@ class Doc {
     $this->doc = [
       '_pathinfo' => pathinfo($inputPath),
     ];
+    $this->modulename = $this->doc['_pathinfo']['filename'] ?? '';
+    if (!$this->modulename) {
+      throw new \Exception('Could not detect the module at the specified location.');
+    }
     $this->getYamlsInfo();
+    $this->getClasses();
   }
 
   /**
@@ -64,6 +74,19 @@ class Doc {
     return $this->doc;
   }
 
+  protected function getClasses() {
+    $files = $this->filesTreatment->findFilesRecursive($this->inputPath . 'src', ['php']);
+
+    $this->doc['classes'] = [];
+    foreach ($files as $file) {
+      $info = $this->filesTreatment->getClassInfo($file);
+      if ($info) {
+        $this->doc['classes'][] = $info;
+      }
+    }
+  }
+
+
   /**
    * Gets the main yamls information from the module path.
    *
@@ -72,13 +95,13 @@ class Doc {
    */
   protected function getYamlsInfo() {
     try {
-      $basename = $this->doc['_pathinfo']['filename'] ?? '';
-      if (!$basename) {
+      $modulename = $this->modulename;
+      if (!$modulename) {
         return FALSE;
       }
       $basic = [];
       foreach ($this->yamls as $name) {
-        $data = $this->filesTreatment->getYaml($this->inputPath . "$basename.$name.yml");
+        $data = $this->filesTreatment->getYaml($this->inputPath . "$modulename.$name.yml");
         if (!empty($data)) {
           $basic[$name] = $data;
         }

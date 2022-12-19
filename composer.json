@@ -16,7 +16,7 @@
     "erusev/parsedown": "^1.7",
     "symfony/console": "^5",
     "symfony/yaml": "^5",
-    "phpdocumentor/reflection": "^5.2"
-
+    "phpactor/worse-reflection": "^0.5",
+    "phpdocumentor/reflection-docblock": "^5.3"
   }
 }

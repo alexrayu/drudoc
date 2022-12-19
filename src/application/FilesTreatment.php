@@ -2,13 +2,11 @@
 
 namespace application;
 
-require 'MdFile.php';
-
-use application\MdFile;
-use phpDocumentor\Reflection\File\LocalFile;
-use Symfony\Component\Console\Output\OutputInterface;
-use phpDocumentor\Reflection\Php\ProjectFactory;
 use Symfony\Component\Yaml\Yaml;
+use Phpactor\WorseReflection\ReflectorBuilder;
+use Phpactor\WorseReflection\Bridge\Phpactor\DocblockParser\DocblockParserFactory;
+use Phpactor\WorseReflection\Bridge\Phpactor\MemberProvider\DocblockMemberProvider;
+use phpDocumentor\Reflection\DocBlockFactory;
 
 /**
  * Class FilesTreatment
@@ -16,95 +14,6 @@ use Symfony\Component\Yaml\Yaml;
  * @package application
  */
 class FilesTreatment {
-
-  /**
-   * @var \phpDocumentor\Reflection\File\LocalFile
-   */
-  private $files = [];
-
-  /**
-   * FilesTreatment constructor.
-   *
-   * @param string $fileOrDir
-   *
-   * @throws \Exception if $fileOrDir is not file or directory.
-   */
-  public function __construct(string $fileOrDir) {
-    if (is_file($fileOrDir)) {
-      $this->files[] = new LocalFile($fileOrDir);
-    }
-    else if (is_dir($fileOrDir)) {
-      $this->files = self::filesFromDirectory($fileOrDir);
-    }
-    else {
-      throw new \Exception('Input should be a file or a directory.');
-    }
-  }
-
-  /**
-   * @param string $directory
-   * @param string[] $results
-   *
-   * @return \phpDocumentor\Reflection\File\LocalFile[]
-   */
-  private static function filesFromDirectory(
-    string $directory,
-    array &$results = []
-  ): array {
-    $files = scandir($directory);
-    foreach ($files as $value) {
-      $path = realpath($directory . DIRECTORY_SEPARATOR . $value);
-      if (!is_dir($path)) {
-        if (pathinfo($path, PATHINFO_EXTENSION) === 'php') {
-          $results[] = new LocalFile($path);
-        }
-      }
-      elseif ($value !== '.' && $value !== '..') {
-        self::filesFromDirectory($path, $results);
-      }
-    }
-    return $results;
-  }
-
-  /**
-   * @param \Symfony\Component\Console\Output\OutputInterface $output
-   * @param string $outputPath
-   *
-   * @throws \phpDocumentor\Reflection\Exception
-   */
-  public function createDocs(
-    OutputInterface $output,
-    string $outputPath
-  ): void {
-    $projectFactory = ProjectFactory::createInstance();
-    $project = $projectFactory->create('Project to document', $this->files);
-    foreach ($project->getFiles() as $file) {
-      foreach ($file->getClasses() as $class) {
-        $mdFile = new MdFile($outputPath . '/' . $class->getName());
-        $output->writeln('Documenting class ' . $class->getName());
-        $mdFile->createFromClass($class);
-      }
-      foreach ($file->getInterfaces() as $interface) {
-        $mdFile = new MdFile($outputPath . '/' . $interface->getName());
-        $output->writeln('Documenting interface ' . $interface->getName());
-        $mdFile->createFromInterface($interface);
-      }
-      foreach ($file->getTraits() as $trait) {
-        $mdFile = new MdFile($outputPath . '/' . $trait->getName());
-        $output->writeln('Documenting trait ' . $trait->getName());
-        $mdFile->createFromTrait($trait);
-      }
-    }
-  }
-
-  /**
-   * Getter for files.
-   *
-   * @return array
-   */
-  public function getFiles() {
-    return $this->files;
-  }
 
   /**
    * Search for files by extension recursively.
@@ -120,7 +29,7 @@ class FilesTreatment {
     $iterator = new \RecursiveIteratorIterator($directory);
     $files = [];
 
-    $directory->setFlags();
+    $directory->setFlags(NULL);
     foreach ($extensions as $extension) {
       $regex = new \RegexIterator($iterator, '/^.+\.' . $extension . '$/i', \RecursiveRegexIterator::GET_MATCH);
       foreach ($regex as $item) {
@@ -165,6 +74,64 @@ class FilesTreatment {
     }
 
     return [];
+  }
+
+  public function getClassInfo($path) {
+
+    // Reflect.
+    $code = file_get_contents($path);
+    if (empty($code)) {
+      return FALSE;
+    }
+    $info = $this->getClassPaths($code);
+    if (empty($info)) {
+      return FALSE;
+    }
+    $reflector = ReflectorBuilder::create()
+      ->addSource($code)
+      ->addMemberProvider(new DocblockMemberProvider())
+      ->build();
+    $reflected = $reflector->reflectClass($info['full_path']);
+    $factory  = DocBlockFactory::createInstance();
+    $docblock = $factory->create($reflected->docblock()->raw());
+
+    // Basic info.
+    $info['summary'] = $docblock->getSummary();
+    $info['description'] = $docblock->getDescription()->render();
+
+    return $info;
+  }
+
+
+
+  /**
+   * Gets the class code paths from the class code.
+   *
+   * @param string $code
+   *   Class code.
+   *
+   * @return array
+   *   Name, namespace, and full path of the class.
+   */
+  public function getClassPaths($code) {
+    $code_paths = [];
+
+    // Remove comments.
+    $code = preg_replace('/\/\*.*\*\//Us', '', $code);
+    $code = preg_replace('/\/\/.*\n/Us', '', $code);
+
+    preg_match('/class\s(.*)(?=\s|{)/U', $code, $matches);
+    if (!empty($matches[1]) && $name = trim($matches[1])) {
+      $code_paths['name'] = $name;
+      $code_paths['namespace'] = '\\';
+      preg_match('/namespace(.*);/U', $code, $namespace_matches);
+      if (!empty($namespace_matches[1]) && $namespace = trim($namespace_matches[1])) {
+        $code_paths['namespace'] = $namespace;
+      }
+      $code_paths['full_path'] = $code_paths['namespace'] . '\\' . $code_paths['name'];
+    }
+
+    return $code_paths;
   }
 
 }

@@ -64,6 +64,9 @@ class Renderer {
    */
   public function write() {
     $contents = $this->templatesEngine->render('base_info', ['data' => $this->data]);
+    $contents .= "\n\n";
+    $contents .= $this->templatesEngine->render('classes', ['data' => $this->data]);
+
     file_put_contents($this->outputPath . 'output.md', $contents);
     $html = $this->parseDown->text($contents);
     file_put_contents($this->outputPath . 'output.html', $html);
