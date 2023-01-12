@@ -60,6 +60,7 @@ class Doc {
     }
     $this->getYamlsInfo();
     $this->getEntities();
+    $this->getPlugins();
   }
 
   /**
@@ -72,6 +73,9 @@ class Doc {
     return $this->doc;
   }
 
+  /**
+   * Processes the entitytype definitions.
+   */
   protected function getEntities() {
     $files = $this->filesTreatment->findFilesRecursive($this->inputPath . 'src/Entity', ['php']);
 
@@ -81,6 +85,29 @@ class Doc {
       if ($info) {
         $this->doc['entities'][] = $info;
       }
+    }
+  }
+
+  /**
+   * Processes the plugins definitions.
+   */
+  protected function getPlugins() {
+    $files = $this->filesTreatment->findFilesRecursive($this->inputPath . 'src/Plugin', ['php']);
+
+    $this->doc['plugins'] = [];
+
+    // Get plugins.
+    $plugins = [];
+    foreach ($files as $file) {
+      $info = $this->filesTreatment->getClassInfo($file);
+      if ($info) {
+        $plugins[] = $info;
+      }
+    }
+
+    // Group plugins.
+    foreach ($plugins as $plugin) {
+      $this->doc['plugins'][$plugin['plugin_type']][] = $plugin;
     }
   }
 

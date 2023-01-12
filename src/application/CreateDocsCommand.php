@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class CreateDocsCommand
+ * Definition for the docs creation command.
  *
  * @package application
  */

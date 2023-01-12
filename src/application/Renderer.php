@@ -46,10 +46,12 @@ class Renderer {
   /**
    * Documentation class constructor.
    *
-   * @param string
+   * @param string $outputPath
    *   Drupal module path.
+   * @param array $data
+   *   Detected data.
    */
-  public function __construct($outputPath, $data) {
+  public function __construct($outputPath, array $data) {
     $this->templatesPath =
       \Phar::running() !== '' ? \Phar::running() . $this->templatesPath
         : getcwd() . '/templates/default';
@@ -64,13 +66,18 @@ class Renderer {
    */
   public function write() {
     $contents = $this->templatesEngine->render('base_info', ['data' => $this->data]);
+
+    // Entity types.
     if (!empty($this->data['entities'])) {
+      $contents .= "\n";
       $contents .= $this->templatesEngine->render('entities', ['data' => $this->data['entities']]);
     }
 
-    #$contents .= $this->templatesEngine->render('routes', ['data' => $this->data]);
-    #$contents .= $this->templatesEngine->render('services', ['data' => $this->data]);
-    #$contents .= $this->templatesEngine->render('plugins', ['data' => $this->data]);
+    // Plugins.
+    if (!empty($this->data['plugins'])) {
+      $contents .= "\n";
+      $contents .= $this->templatesEngine->render('plugins', ['data' => $this->data['plugins']]);
+    }
 
     file_put_contents($this->outputPath . 'output.md', $contents);
     $html = $this->parseDown->text($contents);

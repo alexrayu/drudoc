@@ -72,7 +72,6 @@ if (empty($types)) $types[] = '*Library is empty*';
 1. `<?php echo $id; ?>`: <?php echo implode(', ', $types); ?>.
 <?php } ?>
 <?php } ?>
-
 <?php
 /**
  * Print with dot.

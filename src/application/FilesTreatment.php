@@ -126,6 +126,14 @@ class FilesTreatment {
         $code_paths['namespace'] = $namespace;
       }
       $code_paths['full_path'] = $code_paths['namespace'] . '\\' . $code_paths['name'];
+
+      // Plugin handling.
+      if (str_contains($namespace, 'Plugin')) {
+        $type = explode('\\Plugin\\', $namespace)[1];
+        $parts = explode('\\', $type);
+        $code_paths['plugin_type'] = $parts[0] ?? NULL;
+        $code_paths['plugin_subtype'] = $parts[1] ?? NULL;
+      }
     }
 
     return $code_paths;
