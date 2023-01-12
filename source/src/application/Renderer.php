@@ -2,9 +2,6 @@
 
 namespace application;
 
-use phpDocumentor\Reflection\File\LocalFile;
-use Symfony\Component\Console\Output\OutputInterface;
-use phpDocumentor\Reflection\Php\ProjectFactory;
 use League\Plates\Engine;
 use Parsedown;
 
@@ -44,6 +41,11 @@ class Renderer {
   private $parseDown;
 
   /**
+   * Templates path.
+   */
+  private $templatesPath;
+
+  /**
    * Documentation class constructor.
    *
    * @param string $outputPath
@@ -53,12 +55,12 @@ class Renderer {
    */
   public function __construct($outputPath, array $data) {
     $this->templatesPath =
-      \Phar::running() !== '' ? \Phar::running() . $this->templatesPath
-        : getcwd() . '/templates/default';
+      \Phar::running() !== '' ? \Phar::running() . '/templates'
+        : getcwd() . '/templates';
     $this->templatesEngine = new Engine($this->templatesPath);
     $this->outputPath = $outputPath;
     $this->data = $data;
-    $this->parseDown = new Parsedown();
+    $this->parseDown = new \Parsedown();
   }
 
   /**
