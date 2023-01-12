@@ -5,7 +5,7 @@
  * The main PHP file.
  */
 
-require_once './vendor/autoload.php';
+require_once 'vendor/autoload.php';
 require 'src/application/CreateDocsCommand.php';
 
 use Symfony\Component\Console\Application;
