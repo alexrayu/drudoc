@@ -64,8 +64,13 @@ class Renderer {
    */
   public function write() {
     $contents = $this->templatesEngine->render('base_info', ['data' => $this->data]);
-    $contents .= "\n\n";
-    $contents .= $this->templatesEngine->render('classes', ['data' => $this->data]);
+    if (!empty($this->data['entities'])) {
+      $contents .= $this->templatesEngine->render('entities', ['data' => $this->data['entities']]);
+    }
+
+    #$contents .= $this->templatesEngine->render('routes', ['data' => $this->data]);
+    #$contents .= $this->templatesEngine->render('services', ['data' => $this->data]);
+    #$contents .= $this->templatesEngine->render('plugins', ['data' => $this->data]);
 
     file_put_contents($this->outputPath . 'output.md', $contents);
     $html = $this->parseDown->text($contents);

@@ -1,7 +1,6 @@
-
-## Classes:
+## Entity Types:
 <?php $i = 0; ?>
-<?php foreach ($data['classes'] as $class_info) { ?>
+<?php foreach ($data as $class_info) { ?>
 
 
 <?php $i++; ?>

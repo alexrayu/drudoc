@@ -2,8 +2,6 @@
 
 namespace application;
 
-
-
 /**
  * Class Doc. Main documentation handler.
  *
@@ -61,7 +59,7 @@ class Doc {
       throw new \Exception('Could not detect the module at the specified location.');
     }
     $this->getYamlsInfo();
-    $this->getClasses();
+    $this->getEntities();
   }
 
   /**
@@ -74,18 +72,17 @@ class Doc {
     return $this->doc;
   }
 
-  protected function getClasses() {
-    $files = $this->filesTreatment->findFilesRecursive($this->inputPath . 'src', ['php']);
+  protected function getEntities() {
+    $files = $this->filesTreatment->findFilesRecursive($this->inputPath . 'src/Entity', ['php']);
 
-    $this->doc['classes'] = [];
+    $this->doc['entities'] = [];
     foreach ($files as $file) {
       $info = $this->filesTreatment->getClassInfo($file);
       if ($info) {
-        $this->doc['classes'][] = $info;
+        $this->doc['entities'][] = $info;
       }
     }
   }
-
 
   /**
    * Gets the main yamls information from the module path.

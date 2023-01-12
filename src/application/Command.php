@@ -25,6 +25,8 @@ class Command extends SymfonyCommand {
   }
 
   /**
+   * Main command to create docs.
+   *
    * @param InputInterface $input
    * @param OutputInterface $output
    */
@@ -44,7 +46,8 @@ class Command extends SymfonyCommand {
       $renderer = new Renderer($outputPath, $data);
       $renderer->write();
 
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       $output->writeln('Documentation could not be created: ' . $e->getMessage());
     }
   }

@@ -4,7 +4,6 @@ namespace application;
 
 use Symfony\Component\Yaml\Yaml;
 use Phpactor\WorseReflection\ReflectorBuilder;
-use Phpactor\WorseReflection\Bridge\Phpactor\DocblockParser\DocblockParserFactory;
 use Phpactor\WorseReflection\Bridge\Phpactor\MemberProvider\DocblockMemberProvider;
 use phpDocumentor\Reflection\DocBlockFactory;
 
@@ -29,7 +28,7 @@ class FilesTreatment {
     $iterator = new \RecursiveIteratorIterator($directory);
     $files = [];
 
-    $directory->setFlags(NULL);
+    #$directory->setFlags(NULL);
     foreach ($extensions as $extension) {
       $regex = new \RegexIterator($iterator, '/^.+\.' . $extension . '$/i', \RecursiveRegexIterator::GET_MATCH);
       foreach ($regex as $item) {
@@ -92,7 +91,7 @@ class FilesTreatment {
       ->addMemberProvider(new DocblockMemberProvider())
       ->build();
     $reflected = $reflector->reflectClass($info['full_path']);
-    $factory  = DocBlockFactory::createInstance();
+    $factory = DocBlockFactory::createInstance();
     $docblock = $factory->create($reflected->docblock()->raw());
 
     // Basic info.
@@ -101,8 +100,6 @@ class FilesTreatment {
 
     return $info;
   }
-
-
 
   /**
    * Gets the class code paths from the class code.
