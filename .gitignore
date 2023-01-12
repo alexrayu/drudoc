@@ -1,4 +1,5 @@
  
 .idea
-vendor
+source/vendor
 output
+phar-compile.php

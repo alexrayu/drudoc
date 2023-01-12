@@ -1,0 +1,13 @@
+/vendor
+/.php-cs-fixer.cache
+/tests/Workspace
+/tests/Assets/workspace
+/phpbench.json
+/composer.lock
+/.php_cs.cache
+/stubs
+/.phpbench
+.phpunit.result.cache
+/.vscode
+smoke_test.log
+.php_cs.cache
