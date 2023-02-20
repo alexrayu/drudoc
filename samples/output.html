@@ -1,0 +1,29 @@
+<h1>Honeypot.</h1>
+<p>Mitigates spam form submissions using the honeypot method.</p>
+<h2>Basic Information:</h2>
+<ul>
+<li><strong>Name:</strong> Honeypot.</li>
+<li><strong>Machine name:</strong> <code>honeypot</code>.</li>
+<li><strong>Package:</strong> Spam control.</li>
+<li><strong>Core:</strong> ^9.2 || ^10.</li>
+</ul>
+<h2>Services:</h2>
+<ol>
+<li><code>honeypot</code>.
+<ul>
+<li><strong>Class:</strong> <code>Drupal\honeypot\HoneypotService</code>.</li>
+<li><strong>Arguments:</strong> <code>@current_user</code>, <code>@module_handler</code>, <code>@config.factory</code>, <code>@keyvalue.expirable</code>, <code>@page_cache_kill_switch</code>, <code>@database</code>, <code>@logger.factory</code>, <code>@datetime.time</code>, <code>@string_translation</code>, <code>@cache.default</code>, <code>@request_stack</code>.</li>
+</ul></li>
+</ol>
+<h2>Routes:</h2>
+<ol>
+<li><code>honeypot.config</code>.
+<ul>
+<li><strong>Path:</strong> <code>/admin/config/content/honeypot</code>.</li>
+<li><strong>Handler:</strong> <code>\Drupal\honeypot\Form\HoneypotSettingsForm</code>.</li>
+</ul></li>
+</ol>
+<h2>Menu Links:</h2>
+<ol>
+<li><code>honeypot.config</code>: Honeypot configuration.</li>
+</ol>

@@ -24,11 +24,20 @@ class FilesTreatment {
    *   Found files.
    */
   public function findFilesRecursive($path, array $extensions = []) {
-    $directory = new \RecursiveDirectoryIterator($path);
-    $iterator = new \RecursiveIteratorIterator($directory);
+    if (!file_exists($path) || !is_dir($path)) {
+      return [];
+    }
+
+    try {
+      $directory = new \RecursiveDirectoryIterator($path);
+      $iterator = new \RecursiveIteratorIterator($directory);
+    }
+    catch (\Exception $e) {
+      return [];
+    }
+
     $files = [];
 
-    #$directory->setFlags(NULL);
     foreach ($extensions as $extension) {
       $regex = new \RegexIterator($iterator, '/^.+\.' . $extension . '$/i', \RecursiveRegexIterator::GET_MATCH);
       foreach ($regex as $item) {

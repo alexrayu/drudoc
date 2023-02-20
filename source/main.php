@@ -15,6 +15,7 @@ $app = new Application('drudoc');
 $app->add(new CreateDocsCommand());
 try {
   $app->run();
-} catch (\Exception $e) {
+}
+catch (\Exception $e) {
   print 'Error: ' . $e->getMessage();
 }

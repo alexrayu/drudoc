@@ -81,9 +81,9 @@ class Renderer {
       $contents .= $this->templatesEngine->render('plugins', ['data' => $this->data['plugins']]);
     }
 
-    file_put_contents($this->outputPath . 'output.md', $contents);
+    file_put_contents($this->outputPath . '/output.md', $contents);
     $html = $this->parseDown->text($contents);
-    file_put_contents($this->outputPath . 'output.html', $html);
+    file_put_contents($this->outputPath . '/output.html', $html);
   }
 
 }
